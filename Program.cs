@@ -197,20 +197,189 @@ DATEDIFF - SQL-də iki tarix arasındakı fərqi hesablamaq üçün istifadə ol
             DATEDIFF funksiyası ilə iki tarix arasındakı gün, ay və ya il fərqini əldə edə bilərsiniz.
             Məsələn, SELECT DATEDIFF(DAY, '2023-01-01', '2023-12-31'); əmri ilə 2023-cü ilin yanvar ayının 1-dən dekabr ayının 31-nə qədər olan gün fərqini əldə edə bilərsiniz.
  
+
+
+
+
+
+                                                                            Anomaliyalar və onlara qarşı mübarizə üsulları
+ 
+ İlk olaraq normal table nə olduğunu deyək.
+Normal table - Verilənlər bazasında məlumatların saxlanılması üçün istifadə olunan standart cədvəldir.
+            Normal table-də məlumatlar sütunlar və sətirlər şəklində təşkil edilir.
+            Hər sütun müəyyən bir məlumat tipini təmsil edir və hər sətir isə bir qeydi təmsil edir.
+Normal table-də sadəcə bir Entity olmalıdır.
+            Yəni, hər sütun yalnız bir məlumat tipini təmsil etməlidir və hər sətir yalnız bir qeydi təmsil etməlidir.
+            Bu, məlumatların düzgün və effektiv şəkildə saxlanılmasını təmin edir.
+
+Anomaliyalar - Verilənlər bazasında məlumatların saxlanılması və işlənməsi zamanı meydana çıxan problemlərdir.
+Database-də 3 əsas anomaliya növü mövcuddur:
+1. İnsert Anomaliyası - Yeni məlumat əlavə edərkən, digər məlumatların da daxil edilməsi və ya yenilənməsi tələb olunur.
+            Məsələn, əgər bir cədvəldə müştəri və sifariş məlumatları birlikdə saxlanılırsa, yeni müştəri əlavə edərkən sifariş məlumatlarını da daxil etmək lazım ola bilər.
+            Bu, məlumatların təkrarlanmasına və saxlanılmasına səbəb ola bilər.
+ 
+2. Update Anomaliyası - Mövcud məlumatları yeniləyərkən, digər məlumatların da dəyişdirilməsi və ya yenilənməsi tələb olunur.
+            Məsələn, əgər bir cədvəldə müştəri və sifariş məlumatları birlikdə saxlanılırsa, müştərinin adını dəyişdirmək istədikdə, bütün müştəri qeydlərini yeniləmək lazım ola bilər.
+            Bu, məlumatların təkrarlanmasına və saxlanılmasına səbəb ola bilər.
+
+3. Delete Anomaliyası - Mövcud məlumatları silərkən, digər məlumatların da silinməsi və ya itirilməsi tələb olunur.
+            Məsələn, əgər bir cədvəldə müştəri və sifariş məlumatları birlikdə saxlanılırsa, bir müştərini silmək istədikdə, onunla əlaqəli bütün sifariş məlumatlarını da silmək lazım ola bilər.
+            Bu, məlumatların itirilməsinə və ya təkrarlanmasına səbəb ola bilər.
+
+
+
+Normallaşdırılmamış databaselərin əlamətləri:
+1. Məlumatların təkrarlanması - Eyni məlumat bir neçə dəfə saxlanılır, bu da məlumatların təkrarlanmasına və saxlanılmasına səbəb olur.
+
+Normallaşdırılmış databaselərin əlamətləri:
+1. Məlumatlar təkrarlanmamalıdır.
+2. Hər sütun yalnız bir məlumat tipini təmsil etməlidir. Yəni hər sütun yalnız bir Entity olmalıdır.
+
+
+
+Normalladırmanın 3 əsas forması var:
+1. Birinci Normal Forma (1NF) - 1NF ehtiva edir ki tables-da təkrarlanan sütun və sətirlər olmamalıdır 
+və sütun və sətirlərin kəsişməsində olan informasiya atomar (bölünməz) olmalıdır.
+Atomar informasiya - Məlumatın daha kiçik və bölünməz hissələrə ayrılmasıdır.
+            Məsələn, bir cədvəldə "Ad və Soyad" sütunu varsa, bu sütunu "Ad" və "Soyad" olaraq iki ayrı sütuna bölmək 1NF-ə uyğun olacaq.
+ 
+2. İkinci Normal Forma (2NF) - 2NF ehtiva edir ki tables-da 1NF artıq tətbiq olunur. 
+ Və açar olmayan sütunlar İlkin açardan (Primary Key) asılı olmalıdır.
+ Bu da o deməkdir ki hər bir table yalnız və yalnız bir Entity-ni təmsil etməlidir.
+ Yəni, hər sütun yalnız bir açar sütununa (Primary Key) bağlı olmalıdır.
+ Məsələn, əgər bir cədvəldə "Müştəri ID", "Müştəri Adı" və "Sifariş Tarixi" sütunları varsa, "Müştəri Adı" sütunu yalnız "Müştəri ID" sütununa bağlı olmalıdır.
  
  
+3. Üçüncü Normal Forma (3NF)  - 3NF ehtiva edir ki tables-da artıq 1NF və 2NF artıq tətbiq olunur.
+Və açar olmayan sütunlar yalnız və yalnız İlkin Açardan (Primary Key) asılı olmalıdır.
+Məsələn əgər bir mağazada total qiymət var isə, bu qiymət yalnız və yalnız məhsulun qiymətindən asılı olmalıdır.
+Əgər bizim bu asılılıqlar bizə üstünlük yaradırsa bu zaman 3NF məcburi deyil. Amma 1NF və 2NF məcburidir.
+
+
+
+
+
+
+                                                                            Data types in SQL
+
+Exact numeric types - Tam ədədləri təmsil edən məlumat tipləridir.
+            Məsələn, INT, BIGINT, SMALLINT, TINYINT kimi.
+
+int- 4 baytlıq tam ədəd tipidir. -2,147,483,648-dən 2,147,483,647-ə qədər olan dəyərləri təmsil edə bilər.
+bigint - 8 baytlıq tam ədəd tipidir. -9,223,372,036,854,775,808-dən 9,223,372,036,854,775,807-ə qədər olan dəyərləri təmsil edə bilər.
+smallint - 2 baytlıq tam ədəd tipidir. -32,768-dən 32,767-ə qədər olan dəyərləri təmsil edə bilər.
+tinyint - 1 baytlıq tam ədəd tipidir. 0-dan 255-ə qədər olan dəyərləri təmsil edə bilər.
+bit - 1 bitlik məntiqi dəyər tipidir. 0 və ya 1 dəyərlərini təmsil edə bilər.
+decimal - Sabit nöqtəli ədədləri təmsil edən məlumat tipidir. 
+            Məsələn, DECIMAL(10, 2) tipində bir sütun 10 rəqəmli tam ədəd və 2 rəqəmli onluq hissəni təmsil edə bilər.
+            Bu tipdəki sütunlar dəqiq hesablamalar üçün istifadə olunur.
+money - Pul dəyərlərini təmsil edən məlumat tipidir. 
+            Məsələn, MONEY tipində bir sütun 922,337,203,685,477.5807 qədər pul dəyərini təmsil edə bilər.
+            Bu tipdəki sütunlar maliyyə hesablamaları üçün istifadə olunur.
+smallmoney - Daha kiçik pul dəyərlərini təmsil edən məlumat tipidir. 
+            Məsələn, SMALLMONEY tipində bir sütun 214,748.3647 qədər pul dəyərini təmsil edə bilər.
+            Bu tipdəki sütunlar maliyyə hesablamaları üçün istifadə olunur.
+
+
+Approximate numeric types - Yaxınlaşma ilə təmsil olunan ədədləri təmsil edən məlumat tipləridir.
+            Məsələn, FLOAT və REAL kimi.
+float - Yaxınlaşma ilə təmsil olunan ədədləri təmsil edən məlumat tipidir.
+            FLOAT tipindəki sütunlar 1.79E+308 qədər böyük və -1.79E+308 qədər kiçik dəyərləri təmsil edə bilər.
+            Bu tipdəki sütunlar elmi hesablamalar üçün istifadə olunur.
+real - FLOAT tipinin daha kiçik versiyasıdır.
+            REAL tipindəki sütunlar 3.40E+38 qədər böyük və -3.40E+38 qədər kiçik dəyərləri təmsil edə bilər.
+            Bu tipdəki sütunlar elmi hesablamalar üçün istifadə olunur.
+
+Date and time types - Tarix və vaxtı təmsil edən məlumat tipləridir.
+            Məsələn, DATE, TIME, DATETIME, DATETIME2, SMALLDATETIME kimi.
+
+date - Tarixi təmsil edən məlumat tipidir.
+            DATE tipindəki sütunlar 0001-01-01-dən 9999-12-31-ə qədər olan tarixləri təmsil edə bilər.
+time - Vaxtı təmsil edən məlumat tipidir.
+            TIME tipindəki sütunlar 00:00:00-dən 23:59:59.9999999-a qədər olan vaxtları təmsil edə bilər.
+datetime - Tarix və vaxtı təmsil edən məlumat tipidir.
+            DATETIME tipindəki sütunlar 1753-01-01-dən 9999-12-31-ə qədər olan tarix və vaxtları təmsil edə bilər.
+datetime2 - DATETIME tipinin daha dəqiq versiyasıdır.
+            DATETIME2 tipindəki sütunlar 0001-01-01-dən 9999-12-31-ə qədər olan tarix və vaxtları təmsil edə bilər.
+            Bu tipdəki sütunlar daha dəqiq tarix və vaxt məlumatları üçün istifadə olunur.
+smalldatetime - DATETIME tipinin daha kiçik versiyasıdır.
+            SMALLDATETIME tipindəki sütunlar 1900-01-01-dən 2079-06-06-ya qədər olan tarix və vaxtları təmsil edə bilər.
+            Bu tipdəki sütunlar daha kiçik tarix və vaxt məlumatları üçün istifadə olunur.
+datetime offset - Tarix və vaxtı təmsil edən məlumat tipidir.
+            DATETIMEOFFSET tipindəki sütunlar 0001-01-01-dən 9999-12-31-ə qədər olan tarix və vaxtları təmsil edə bilər.
+            Bu tipdəki sütunlar zaman zonası məlumatlarını da saxlayır.
+
+character types - Simvolları təmsil edən məlumat tipləridir.
+            Ascii character types - ASCII simvollarını təmsil edən məlumat tipləridir.
+            Məsələn, CHAR, VARCHAR, NCHAR, NVARCHAR kimi.
+char - Sabit uzunluqlu simvolları təmsil edən məlumat tipidir.
+            CHAR tipindəki sütunlar 1-dən 8000-ə qədər simvolu təmsil edə bilər.
+            Bu tipdəki sütunlar sabit uzunluqlu simvollar üçün istifadə olunur.
+
+varchar - Dəyişən uzunluqlu simvolları təmsil edən məlumat tipidir.
+            VARCHAR tipindəki sütunlar 1-dən 8000-ə qədər simvolu təmsil edə bilər.
+            Bu tipdəki sütunlar dəyişən uzunluqlu simvollar üçün istifadə olunur.
+text - Çox uzun simvolları təmsil edən məlumat tipidir.
+            TEXT tipindəki sütunlar 2^31-1 simvola qədər olan mətnləri təmsil edə bilər.
+            Bu tipdəki sütunlar çox uzun mətn məlumatları üçün istifadə olunur.
+
+Unicode character types - Unicode simvollarını təmsil edən məlumat tipləridir.
+            Unicode simvolları, müxtəlif dillərdəki simvolları təmsil etmək üçün istifadə olunur.
+            Məsələn, NCHAR, NVARCHAR, NTEXT kimi.
+nchar - Sabit uzunluqlu Unicode simvollarını təmsil edən məlumat tipidir.
+            NCHAR tipindəki sütunlar 1-dən 4000-ə qədər Unicode simvolunu təmsil edə bilər.
+            Bu tipdəki sütunlar sabit uzunluqlu Unicode simvollar üçün istifadə olunur.
+nvarchar - Dəyişən uzunluqlu Unicode simvollarını təmsil edən məlumat tipidir.
+            NVARCHAR tipindəki sütunlar 1-dən 4000-ə qədər Unicode simvolunu təmsil edə bilər.
+            Bu tipdəki sütunlar dəyişən uzunluqlu Unicode simvollar üçün istifadə olunur.
+ntext - Çox uzun Unicode simvollarını təmsil edən məlumat tipidir.
+            NTEXT tipindəki sütunlar 2^30-1 Unicode simvoluna qədər olan mətnləri təmsil edə bilər.
+            Bu tipdəki sütunlar çox uzun Unicode mətn məlumatları üçün istifadə olunur.
+
+
+ char və nchar fixed sized amma varchar və nvarchar variable sized-dir.
+            Yəni, char və nchar sütunları sabit uzunluqlu simvolları təmsil edir, 
+            lakin varchar və nvarchar sütunları dəyişən uzunluqlu simvolları təmsil edir.
+            Bu səbəbdən, varchar və nvarchar sütunları daha az yer tutar və daha çevikdir.
  
  
+binary types - İkili məlumatları təmsil edən məlumat tipləridir.
+            Məsələn, BINARY, VARBINARY, IMAGE kimi.
+binary - Sabit uzunluqlu ikili məlumatları təmsil edən məlumat tipidir.
+            BINARY tipindəki sütunlar 1-dən 8000-ə qədər baytı təmsil edə bilər.
+            Bu tipdəki sütunlar sabit uzunluqlu ikili məlumatlar üçün istifadə olunur.
+
+varbinary - Dəyişən uzunluqlu ikili məlumatları təmsil edən məlumat tipidir.
+            VARBINARY tipindəki sütunlar 1-dən 8000-ə qədər baytı təmsil edə bilər.
+            Bu tipdəki sütunlar dəyişən uzunluqlu ikili məlumatlar üçün istifadə olunur.
+image - Çox uzun ikili məlumatları təmsil edən məlumat tipidir.
+            IMAGE tipindəki sütunlar 2^31-1 bayta qədər olan ikili məlumatları təmsil edə bilər.
+            Bu tipdəki sütunlar çox uzun ikili məlumatlar üçün istifadə olunur.
+
+
+other data types - Digər məlumat tipləridir.
+            Məsələn, XML, JSON, HIERARCHYID, GEOGRAPHY, GEOMETRY kimi.
+xml - XML məlumatlarını təmsil edən məlumat tipidir.
+            XML tipindəki sütunlar XML formatında məlumatları təmsil edə bilər.
+            Bu tipdəki sütunlar XML məlumatları üçün istifadə olunur.
+json - JSON məlumatlarını təmsil edən məlumat tipidir.
+            JSON tipindəki sütunlar JSON formatında məlumatları təmsil edə bilər.
+            Bu tipdəki sütunlar JSON məlumatları üçün istifadə olunur.
+hierarchyid - Hiyerarşik məlumatları təmsil edən məlumat tipidir.
+            HIERARCHYID tipindəki sütunlar hiyerarşik məlumatları təmsil edə bilər.
+            Bu tipdəki sütunlar hiyerarşik məlumatlar üçün istifadə olunur.
+geography - Coğrafi məlumatları təmsil edən məlumat tipidir.
+            GEOGRAPHY tipindəki sütunlar coğrafi məlumatları təmsil edə bilər.
+            Bu tipdəki sütunlar coğrafi məlumatlar üçün istifadə olunur.
+geometry - Coğrafi məlumatları təmsil edən məlumat tipidir.
+            GEOMETRY tipindəki sütunlar coğrafi məlumatları təmsil edə bilər.
+            Bu tipdəki sütunlar coğrafi məlumatlar üçün istifadə olunur.
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
  
  
  
