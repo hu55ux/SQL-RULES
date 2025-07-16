@@ -379,7 +379,79 @@ geometry - Coğrafi məlumatları təmsil edən məlumat tipidir.
 
 
 
+                                                                            Constraints in SQL
 
+Constraints - məhdudiyyətlərdir.
+            Constraints, verilənlər bazasında məlumatların düzgünlüyünü və bütövlüyünü təmin etmək üçün istifadə olunur.
+            Məsələn, PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK kimi məhdudiyyətlər.
+
+Primary Key - Cədvəldəki hər bir sətiri unikal şəkildə təmsil edən sütundur.
+            PRIMARY KEY məhdudiyyəti ilə təyin olunan sütun və ya sütunlar cədvəldəki hər bir sətiri unikal şəkildə təmsil edir.
+            Bu, məlumatların təkrarlanmasının qarşısını alır və verilənlər bazasında məlumatların düzgünlüyünü təmin edir.
+            Hər cədvəldə yalnız bir PRIMARY KEY ola bilər.
+İdentity - SQL Server-də PRIMARY KEY sütununa avtomatik olaraq unikal dəyərlər təyin etmək üçün istifadə olunan bir xüsusiyyətdir.
+            IDENTITY sütunu, yeni sətirlər əlavə edildikdə avtomatik olaraq artan bir ədəd təyin edir.
+            Məsələn, IDENTITY(1,1) ilə təyin olunan bir sütun, ilk sətir üçün 1, ikinci sətir üçün 2 və s. dəyərləri alacaq.
+Default - SQL Server-də sütunlara avtomatik olaraq dəyər təyin etmək üçün istifadə olunan bir xüsusiyyətdir.
+            DEFAULT məhdudiyyəti ilə təyin olunan sütun, yeni sətirlər əlavə edildikdə avtomatik olaraq müəyyən bir dəyər alır.
+            Məsələn, DEFAULT GETDATE() ilə təyin olunan bir sütun, yeni sətirlər əlavə edildikdə avtomatik olaraq indiki tarix və saatı alacaq.
+Check - SQL Server-də sütunlara müəyyən şərtlərə uyğun dəyərlər təyin etmək üçün istifadə olunan bir məhdudiyyətdir.
+            CHECK məhdudiyyəti ilə təyin olunan sütun, yalnız müəyyən şərtlərə uyğun dəyərləri qəbul edir.
+            Məsələn, CHECK (ColumnName > 0) ilə təyin olunan bir sütun, yalnız 0-dan böyük dəyərləri qəbul edəcək.
+Unique - SQL Server-də sütunların unikal dəyərlərini təmin etmək üçün istifadə olunan bir məhdudiyyətdir.
+            UNIQUE məhdudiyyəti ilə təyin olunan sütun, cədvəldəki hər bir sətir üçün unikal dəyərləri təmin edir.
+            Bu, məlumatların təkrarlanmasının qarşısını alır və verilənlər bazasında məlumatların düzgünlüyünü təmin edir.
+Null or Not Null - SQL Server-də sütunların NULL və ya NOT NULL olmasını təyin etmək üçün istifadə olunan bir məhdudiyyətdir.
+            NULL məhdudiyyəti ilə təyin olunan sütun, dəyəri olmayan və ya məlum olmayan məlumatları qəbul edir.
+            NOT NULL məhdudiyyəti ilə təyin olunan sütun, dəyəri olan və məlum olan məlumatları qəbul edir.
+            Bu, verilənlər bazasında məlumatların düzgünlüyünü və bütövlüyünü təmin edir.
+Foreign Key - Cədvəldəki sütunların digər cədvəllərlə əlaqələrini təyin etmək üçün istifadə olunan bir məhdudiyyətdir.
+           FOREIGN KEY məhdudiyyəti ilə təyin olunan sütun, digər cədvəldəki PRIMARY KEY və ya UNIQUE sütununa istinad edir.
+            Bu, verilənlər bazasında məlumatların bütövlüyünü və əlaqələrini təmin edir.
+            FOREIGN KEY məhdudiyyəti ilə təyin olunan sütun, yalnız digər cədvəldəki uyğun dəyərləri qəbul edir.
+            Bu, məlumatların təkrarlanmasının qarşısını alır və verilənlər bazasında məlumatların düzgünlüyünü təmin edir.
+
+
+Bu Constraintslərin hər birinin özünə uyğun bir prefiksi var:
+PK - Primary Key
+FK - Foreign Key
+CK - Check
+UQ - Unique
+DF - Default
+
+GO keyword - SQL Server-də əmrləri icra etmək üçün istifadə olunan bir açar sözdür.
+            GO açar sözü, SQL Server-ə əmrlərin sonunu bildirir və əmrləri icra etməyə başlayır.
+            Bu, SQL Server-ə bir neçə əmri eyni anda icra etməyə imkan verir.
+            Məsələn, bir neçə CREATE TABLE əmri yazdıqdan sonra GO açar sözünü istifadə edərək bütün əmrləri eyni anda icra edə bilərsiniz.
+
+
+
+-- SQL-in əsas anlayışları və əmrləri haqqında məlumat
+ON DELETE - silinmə zamanı baş verəcək 4 hadisə var :
+1. ON DELETE NO ACTION - Əgər silinən sətirə istinad edən digər cədvəllərdə sətirlər varsa, silmə əməliyyatı icra olunmayacaq.
+2. ON DELETE CASCADE - Əgər silinən sətirə istinad edən digər cədvəllərdə sətirlər varsa, həmin sətirlər də avtomatik olaraq silinəcək.
+3. ON DELETE SET NULL - Əgər silinən sətirə istinad edən digər cədvəllərdə sətirlər varsa, həmin sətirlərin FOREIGN KEY sütunları NULL dəyərinə təyin ediləcək.
+4. ON DELETE SET DEFAULT - Əgər silinən sətirə istinad edən digər cədvəllərdə sətirlər varsa, həmin sətirlərin FOREIGN KEY sütunları DEFAULT dəyərinə təyin ediləcək.
+
+ON UPDATE - yenilənmə zamanı baş verəcək 4 hadisə var:
+1. ON UPDATE NO ACTION - Əgər yenilənən sətirə istinad edən digər cədvəllərdə sətirlər varsa, yeniləmə əməliyyatı icra olunmayacaq.
+2. ON UPDATE CASCADE - Əgər yenilənən sətirə istinad edən digər cədvəllərdə sətirlər varsa, həmin sətirlər də avtomatik olaraq yenilənəcək.
+3. ON UPDATE SET NULL - Əgər yenilənən sətirə istinad edən digər cədvəllərdə sətirlər varsa, həmin sətirlərin FOREIGN KEY sütunları NULL dəyərinə təyin ediləcək.
+4. ON UPDATE SET DEFAULT - Əgər yenilənən sətirə istinad edən digər cədvəllərdə sətirlər varsa, həmin sətirlərin FOREIGN KEY sütunları DEFAULT dəyərinə təyin ediləcək.
+
+
+1-1 və ya 1-çox əlaqəsi zamanı ən az 2 table istifadə olunmalıdır. 
+Amma çox-çox əlaqəsi zamanı minimum 3 table istifadə olunmalıdır.
+            Bu, çox-çox əlaqələrinin düzgün işləməsi üçün tələb olunur.
+            Çox-çox əlaqələrdə, iki cədvəl arasında bir vasitəçi cədvəl (junction table) istifadə olunur.
+            Bu vasitəçi cədvəl, hər iki cədvəldəki sütunların istinadlarını saxlayır və əlaqələri təmsil edir.
+
+
+Table yarandıqdan sonra biz bu table-a data və ya constraint əlavə etmək istəyə bilərik. Bu zaman biz ALTER TABLE əmrlərindən istifadə edirik.
+            ALTER TABLE əmri ilə cədvəldəki sütunları əlavə edə, silə və ya dəyişdirə bilərsiniz.
+            Məsələn, ALTER TABLE TableName ADD ColumnName DataType; əmri ilə TableName cədvəlinə yeni bir sütun əlavə edə bilərsiniz.
+            Və ya ALTER TABLE TableName DROP COLUMN ColumnName; əmri ilə TableName cədvəlindən bir sütunu silə bilərsiniz.
+            Həmçinin, ALTER TABLE TableName ALTER COLUMN ColumnName DataType; əmri ilə TableName cədvəlindəki bir sütunun məlumat tipini dəyişdirə bilərsiniz.
  
  
  
