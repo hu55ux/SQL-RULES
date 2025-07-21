@@ -454,27 +454,303 @@ Table yarandıqdan sonra biz bu table-a data və ya constraint əlavə etmək is
             Həmçinin, ALTER TABLE TableName ALTER COLUMN ColumnName DataType; əmri ilə TableName cədvəlindəki bir sütunun məlumat tipini dəyişdirə bilərsiniz.
  
  
+                                                                    
+
+                                                                JOIN's in SQL
+
+// JOIN - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+Joinlərin iki əsas növü var:
+1. İmplicit Join - SQL-də biz heç bir şərt olmadıqda iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+
+2. Explicit Join - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+            Explicit Join-lər INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN kimi müxtəlif növlərə malikdir.
+
+CROSS JOİN - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+                CROSS JOIN əmri ilə iki və ya daha çox cədvəldəki bütün sətirləri birləşdirə bilərsiniz.
+                Məsələn, SELECT * FROM Table1 CROSS JOIN Table2; əmri ilə Table1 və Table2 cədvəllərini birləşdirə bilərsiniz.
+                CROSS JOIN əmri, hər iki cədvəldəki bütün sətirlərin kombinasiyasını yaradır.
+                Bu, çoxlu sayda nəticə verə bilər və diqqətlə istifadə olunmalıdır. 
+
+INNER JOIN - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+                INNER JOIN əmri ilə iki və ya daha çox cədvəldəki uyğun sətirləri birləşdirə bilərsiniz.
+                Məsələn, SELECT * FROM Table1 INNER JOIN Table2 ON Table1.ColumnName = Table2.ColumnName; əmri ilə Table1 və Table2 cədvəllərini ColumnName sütununa görə birləşdirə bilərsiniz.
+                INNER JOIN əmri Foreign Keylərlə Primary Key arasında istifadə olunur.
+                İNNER JOİN yazılan zaman WHERE code bbloku yerinə ON code bloku istifadə olunur.
+                VƏ İNNER JOİN zamanı CROSS JOİN-dən fərqli olaraq şərt əlavə olunmazsa bu bizə syntax error verəcək.
+
+
+OUTER JOİNS - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+                OUTER JOIN-lər LEFT JOIN, RIGHT JOIN və FULL OUTER JOIN kimi müxtəlif növlərə malikdir.
+                OUTER JOİN daha çox Riyaziyyatda istifadə olunan Venn diagramlarına bənzəyir. Məsələn:
+
+LEFT JOIN - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+                LEFT JOIN əmri ilə sol cədvəldəki bütün sətirləri və sağ cədvəldəki uyğun sətirləri birləşdirə bilərsiniz.
+                Məsələn, SELECT * FROM Table1 LEFT JOIN Table2 ON Table1.ColumnName = Table2.ColumnName; əmri ilə Table1 cədvəlindəki bütün sətirləri və Table2 cədvəlindəki uyğun sətirləri birləşdirə bilərsiniz.
+                LEFT JOIN əmri, sol cədvəldəki bütün sətirləri saxlayır və sağ cədvəldə uyğun olmayan sətirlər üçün NULL dəyərlər təyin edir.
+
+RİGHT JOIN - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+                RIGHT JOIN əmri ilə sağ cədvəldəki bütün sətirləri və sol cədvəldəki uyğun sətirləri birləşdirə bilərsiniz.
+                Məsələn, SELECT * FROM Table1 RIGHT JOIN Table2 ON Table1.ColumnName = Table2.ColumnName; əmri ilə Table2 cədvəlindəki bütün sətirləri və Table1 cədvəlindəki uyğun sətirləri birləşdirə bilərsiniz.
+                RIGHT JOIN əmri, sağ cədvəldəki bütün sətirləri saxlayır və sol cədvəldə uyğun olmayan sətirlər üçün NULL dəyərlər təyin edir.
+
+FULL OUTER JOİN - SQL-də iki və ya daha çox cədvəli birləşdirmək üçün istifadə olunan əmrdır.
+                FULL OUTER JOIN əmri ilə hər iki cədvəldəki bütün sətirləri birləşdirə bilərsiniz.
+                Məsələn, SELECT * FROM Table1 FULL OUTER JOIN Table2 ON Table1.ColumnName = Table2.ColumnName; əmri ilə Table1 və Table2 cədvəllərini ColumnName sütununa görə birləşdirə bilərsiniz.
+                FULL OUTER JOIN əmri, hər iki cədvəldəki bütün sətirləri saxlayır və uyğun olmayan sətirlər üçün NULL dəyərlər təyin edir.
+
+
+
+
+                                                                        UNION, EXCEPT, INTERSECTION
+
+UNION - SQL-də UNION iki table eyni sayda sütun və bu sütunların eyni data typeda olmaları təmin olunmaq şərti ilə 
+                                      birləşdirilməsi və bu dataların eyni sütunda görünmməsi üçün istifadə olunur.
+ 
+SELECT FirstName, LastName 
+FROM Employees
+UNION
+SELECT FirstName, LastName
+FROM Customers 
+
+Bu zaman eyni datalar təkrarlanmır amma biz UNION sözünün qarşısına ALL əlavə etsək bu zaman eyni datalar varsa əgər neçə ədəd varsa o sayda da çıxacaq.
+
+SELECT FirstName, LastName 
+FROM Employees
+UNION ALL
+SELECT FirstName, LastName
+FROM Customers 
+
+UNION üçün hər bir table-a fərqli şərt əlavə etmək istəyiriksə bu zaman syntax belə olacaq:
+
+SELECT FirstName, LastName 
+FROM Employees
+WHERE FirstName LIKE N'Huseyn'
+UNION
+SELECT FirstName, LastName
+FROM Customers 
+WHERE FirstName LIKE N'Abbas'
+
+
+EXCEPT - SQL-də EXCEPT iki table eyni sayda sütun və bu sütunların eyni data typeda olmaları təmin olunmaq şərti ilə 
+                                      birləşdirilməsi və bu dataların bir table-da olan, digər table-da olmayan dataların çıxarılması üçün istifadə olunur.
+
+SELECT FirstName, LastName
+FROM Employees
+EXCEPT
+SELECT FirstName, LastName
+FROM Customers
+
+
+INTERSECT - SQL-də INTERSECT iki table eyni sayda sütun və bu sütunların eyni data typeda olmaları təmin olunmaq şərti ilə 
+                                      birləşdirilməsi və bu dataların hər iki table-da olan dataların çıxarılması üçün istifadə olunur.
+
+
+ 
+
+                                                            SubQuery
+
+SubQuery - SQL-də bir sorğunun içində başqa bir sorğu istifadə etmək üçün istifadə olunan bir üsuldur.
+            SubQuery, əsas sorğunun nəticələrini daha da süzgəcləmək və ya əlavə məlumat əldə etmək üçün istifadə olunur.
+            SubQuery, əsas sorğunun WHERE, FROM və ya SELECT hissələrində istifadə edilə bilər.
+
+Məsələn minimum yaşda olan müəllimləri tapmaq üçün aşağıdakı kimi bir SubQuery istifadə edə bilərik:
+
+SELECT *
+FROM Teachers
+WHERE Age = (SELECT MIN(Age) FROM Teachers);
+
+Və ya ortalamadan yuxarı yaşda olanları seçək
+
+SELECT *
+FROM Teachers
+WHERE Age > (SELECT AVG(Age) FROM Teachers);
+
+
+
+SubQuery-nin 2 növü var:
+1. Correlated SubQuery - Əgər Subquery-də olan SELECT sorğusu Main Query-nin nəticəsindən asılıdırsa 
+                            Correlated SubQuery, əsas sorğunun hər bir sətiri üçün ayrı-ayrı nəticələr verir.
+                            Məsələn, aşağıdakı kimi bir Correlated SubQuery istifadə edə bilərik:
+
+SELECT DİSTİNCT [Group] (
+                        SELECT AVG(Age)
+                        FROM Students AS SubS
+                        WHERE SubS.[Group] = S.[Group]
+                        ) AS AverageAge
+FROM Students AS S
+
+bu hissədə əsas sorğu alt sorğunun hər dəfə göndərdiyi dəyərə uyğun işləyir.
+
+
+2.Non-Correlated SubQuery - Əgər Subquery-də olan SELECT sorğusu bütün sorğu üçün faktiki olaraq bir sorğu yerinə yetirirsə 
+                            yəni subQuery-nin nəticəsi Main Query-nin nəticəsindən asılı deyilsə, bu zaman Non-Correlated SubQuery adlanır.
+ 
+SELECT FirstName + N' ' + LastName AS FullName (
+                        SELECT Id, FirstName, LastName
+                        FROM Students
+                        WHERE 
+                        ) AS Stud
  
  
  
  
+                                                            VIEW
+
+View - SQL-də View, bir və ya daha çox cədvəldən məlumatları birləşdirərək virtual bir cədvəl yaratmaq üçün istifadə olunan bir xüsusiyyətdir.
+            View, əsas cədvəllərdəki məlumatları dəyişdirmədən, yalnız oxumaq üçün istifadə olunur.
+            View-lər, SQL sorğularını daha sadə və oxunaqlı etmək üçün istifadə olunur.
+            View-lər hər bir zaman güncəl məlumatları göstərir, çünki onlar əsas cədvəllərdən məlumatları dinamik olaraq alır.
+            View-lərı əgər bir neçə table-dan olan məlumatları birləşdirmək üçündürsə və biz onları dəyişmək istəyiriksə bu zaman bu əməliyyatlar
+            yalnız və yalnız bir table aid olmalıdır.
+SYNTAX:
+
+CREATE VIEW ViewName AS
+SELECT S.Column1, S.Column2, T.Column3 AS Column3
+FROM TableName AS T1 INNER JOIN TableName AS T2 ON T1.ColumnName = T2.ColumnName 
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+Bu sorğuda olan məlumatları istənilən zaman çağırmaq olar və bu da bizə daha səliqəli kod yazmağa kömək edir.
+
+SELECT * FROM ViewName;
+Bu kod bloku ilə də içəridəki məlumatları əldə edə bilərik
+
+View üçün əlavə bir parametrdə var ki bu SCHEMABINDING adlanır 
+SCHEMABINDING - SQL Server-də View-lərin əsas cədvəllərlə əlaqəsini qorumaq üçün istifadə olunan bir xüsusiyyətdir.
+            SCHEMABINDING ilə təyin olunan View, əsas cədvəllərdəki sütunların və ya cədvəlin adlarının dəyişdirilməsinə icazə vermir.
+            Bu, View-lərin düzgün işləməsini təmin edir və məlumatların bütövlüyünü qoruyur.
+            Məsələn, aşağıdakı kimi bir View yaratmaq üçün SCHEMABINDING istifadə edə bilərsiniz:
+
+
+CREATE VIEW ViewName 
+WiTH SCHEMABINDING
+AS
+SELECT S.Column1, S.Column2, T.Column3 AS Column3
+FROM sdo.TableName AS T1 INNER JOIN dbo.TableName AS T2 ON T1.ColumnName = T2.ColumnName 
+
+Biz bu zaman datalar üzərində əməliyyatlar yerinə yetirə bilərik amma struktur dəyişikliyi edə bilmərik
+Və istifadə olunan table adını dbo.TableName kimi yazmalıyıq.
+Struktur dəyişikliyi üçün isə biz view-u silməliyik və ya ALTER VIEW əmri ilə yenidən yaratmalıyıq.
+
+Hazır system view-ları da varki bunlar bizə bir çox məlumatları göstərmək üçündür məsələn:
+
+
+                                                            Variables
+
+Variables - adı tipi dəyəri ölçüsü adresi və yaddaşda yer saxlayan yaddaş sahəsidir.
+DECLARE @number1 AS int = 7
+DECLARE @number2 AS int = 17
+Və bu dəyişənlər üzərində əməllər edə bilərik və ya parametr olaraq istifadə edə bilərik
+PRINT methodu ilə biz mesaj hissəsinə yazı çıxara bilirik.
+
+                                                    IF - ELSE kod blokları
+
+IF ELSE kod blokunda () yerinə BEGIN və END istifadə olunur
+
+IF @number1 = @number2
+                BEGIN
+                    PRINT '@number1 = @number2'
+                END
+ELSE
+    BEGIN
+        IF @number1 > @number2
+            BEGIN
+                PRINT '@number1 > @number2'
+            END
+        ELSE
+            BEGIN
+                PRINT '@number1 < @number2'
+            END
+
+Eləcə də WHILE və FOR kod blokları da var.
+
+WHILE - SQL Server-də dövr əməliyyatlarını yerinə yetirmək üçün istifadə olunan bir kod blokudur.
+            WHILE dövrü, müəyyən bir şərt doğru olduğu müddətdə təkrarlanır.
+            Məsələn, aşağıdakı kimi bir WHILE dövrü istifadə edə bilərsiniz:
+WHILE @number1 < @number2
+BEGIN
+    PRINT @number1
+    SET @number1 = @number1 + 1
+END
+
+
+
+
+                                                    Stored Procedures (SP) 
+
+Stored Procedures - SQL Server-də saxlanılan prosedurlar, müəyyən bir əməliyyatı yerinə yetirmək üçün əvvəlcədən yazılmış və saxlanılan SQL kod bloklarıdır.
+            Stored Procedures, təkrarlanan əməliyyatları sadələşdirmək və performansı artırmaq üçün istifadə olunur.
+            Stored Procedures, parametr qəbul edə bilər və nəticələri qaytara bilər.
+            Stored Procedures, SQL Server-də CREATE PROCEDURE əmri ilə yaradılır.
+
+SP - code blockları əgər düzgün işləyərsə 0 kodu geri qaytarır. Amma error olduqda sadəcə error kodunu qaytarır.
+Məsələn
+
+CREATE PROCEDURE TakenBook
+AS 
+BEGİN
+    SELECT FirstName, LastName, B.[Name]
+    FROM Students AS S
+    INNER JOIN S_Cards AS SC ON S.ID = SC.Id_Student
+    INNER JOIN Books AS B.Id = SC.Id_Book
+    WHERE SC.DateIn IS NULL
+END
+
+Bu Proceduru çağırmaq üçün EXECUTE istifadə olunur. Məsələn:
+EXECUTE TakenBook
+
+Bu procedure-a parametrdə göndərə bilərik. Məsələn:
+
+ALTER PROCEDURE TakenBook
+    @group AS nvarcar(50)
+AS 
+BEGİN
+    SELECT FirstName, LastName, B.[Name]
+    FROM Students AS S
+    INNER JOIN S_Cards AS SC ON S.ID = SC.Id_Student
+    INNER JOIN Books AS B.Id = SC.Id_Book
+    WHERE SC.DateIn IS NULL AND G.[Name] = @group
+END
+
+EXEC TakenBook '18P2' - Bu zaman göndərilən parametrə(group adına uyğun filterləmə gedir.)
+
+
+OUTPUT - SQL-də SP - lərin returnudur. 
+
+ALTER PROCEDURE TakenBook
+    @group AS nvarcar(50)
+    @count AS int OUTPUT
+AS 
+BEGİN
+    SELECT FirstName, LastName, B.[Name]
+    FROM Students AS S
+    INNER JOIN S_Cards AS SC ON S.ID = SC.Id_Student
+    INNER JOIN Books AS B.Id = SC.Id_Book
+    WHERE SC.DateIn IS NULL AND G.[Name] = @group
+
+    SET @count=@@ROWCOUNT
+END
+Bu code blockunda biz row countu @count dəyişəninə mənimsədirik.
+
+
+DECLARE @count AS int
+
+EXEC TakenBook '18P2', @count OUTPUThhh
+
+UDF - blockları isə SQL Server-də istifadə olunan funksiyalardır.
+            UDF-lər, müəyyən bir əməliyyatı yerinə yetirmək üçün əvvəlcədən yazılmış və saxlanılan SQL kod bloklarıdır.
+            UDF-lər, parametr qəbul edə bilər və nəticələri qaytara bilər.
+            UDF-lər, SQL Server-də CREATE FUNCTION əmri ilə yaradılır.
+            UDF-lər, SELECT, WHERE və digər SQL əmrlərində istifadə edilə bilər.
+
+Transaction - SQL Server-də əməliyyatların birləşdirilməsi və idarə edilməsi üçün istifadə olunan bir xüsusiyyətdir.
+            Transaction, bir və ya daha çox SQL əmrlərini bir araya gətirərək, bu əmrlərin hamısının uğurla yerinə yetirilməsini və ya heç birinin yerinə yetirilməməsini təmin edir.
+            Transaction, SQL Server-də BEGIN TRANSACTION, COMMIT və ROLLBACK əmrləri ilə idarə olunur.
+
+
+Triggers - SQL Server-də Trigger, müəyyən bir hadisə baş verdikdə avtomatik olaraq işləyən bir kod blokudur.
+            Trigger-lər, INSERT, UPDATE və DELETE əməliyyatları üçün istifadə olunur.
+            Trigger-lər, SQL Server-də CREATE TRIGGER əmri ilə yaradılır.
+            Trigger-lər, cədvəldəki məlumatların dəyişdirilməsi zamanı avtomatik olaraq işləyir və əlavə əməliyyatlar yerinə yetirir.
+            Məsələn, aşağıdakı kimi bir Trigger istifadə edə bilərsiniz:
  
  
  

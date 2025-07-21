@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SQL Rules")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d24d4616e138f486f92802acc0fd7223e7fbae52")]
 [assembly: System.Reflection.AssemblyProductAttribute("SQL Rules")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SQL Rules")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
