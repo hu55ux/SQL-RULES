@@ -752,6 +752,59 @@ Triggers - SQL Server-də Trigger, müəyyən bir hadisə baş verdikdə avtomat
             Trigger-lər, cədvəldəki məlumatların dəyişdirilməsi zamanı avtomatik olaraq işləyir və əlavə əməliyyatlar yerinə yetirir.
             Məsələn, aşağıdakı kimi bir Trigger istifadə edə bilərsiniz:
  
+
+
+
+
+                                                                    UDF (User Defined Functions)
+
+UDF - SQL Server-də istifadə olunan funksiyalardır.
+            UDF-lər, müəyyən bir əməliyyatı yerinə yetirmək üçün əvvəlcədən yazılmış və saxlanılan SQL kod bloklarıdır.
+            UDF-lər, parametr qəbul edə bilər və nəticələri qaytara bilər.
+            UDF-lər, SQL Server-də CREATE FUNCTION əmri ilə yaradılır.
+            UDF-lər, SELECT, WHERE və digər SQL əmrlərində istifadə edilə bilər.
+
+UDF-lərin 2 əsas növü var:
+1. Scalar - valued Functions - Scalar Functions, bir dəyər qaytaran funksiyalardır.
+            Scalar Functions, bir və ya daha çox parametr qəbul edə bilər və nəticəni bir dəyər olaraq qaytarır.
+            Məsələn, aşağıdakı kimi bir Scalar Function istifadə edə bilərsiniz:
+// Bu funksiyanı istifadə edərək, ad və soyadı birləşdirə bilərsiniz:
+
+CREATE FUNCTION dbo.GetFullName
+(
+    @FirstName NVARCHAR(50),
+    @LastName NVARCHAR(50)
+)
+RETURNS NVARCHAR(100)
+AS
+BEGIN
+    RETURN @FirstName + ' ' + @LastName
+END
+
+
+
+2. Table - valued Functions - Table Functions, bir cədvəl qaytaran funksiyalardır.
+            Table Functions, bir və ya daha çox parametr qəbul edə bilər və nəticəni bir cədvəl olaraq qaytarır.
+            Məsələn, aşağıdakı kimi bir Table Function istifadə edə bilərsiniz:
+CREATE FUNCTION dbo.GetStudentsByGroup
+(
+    @GroupName NVARCHAR(50)
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT FirstName, LastName
+    FROM Students
+    WHERE [Group] = @GroupName
+)
+// Bu funksiyanı istifadə edərək, müəyyən bir qrupdakı tələbələri əldə edə bilərsiniz:
+
+
+
+                                                            Transaction
+
+Transaction
  
  
  
