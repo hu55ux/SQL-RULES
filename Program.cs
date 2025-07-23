@@ -735,11 +735,7 @@ DECLARE @count AS int
 
 EXEC TakenBook '18P2', @count OUTPUThhh
 
-UDF - blockları isə SQL Server-də istifadə olunan funksiyalardır.
-            UDF-lər, müəyyən bir əməliyyatı yerinə yetirmək üçün əvvəlcədən yazılmış və saxlanılan SQL kod bloklarıdır.
-            UDF-lər, parametr qəbul edə bilər və nəticələri qaytara bilər.
-            UDF-lər, SQL Server-də CREATE FUNCTION əmri ilə yaradılır.
-            UDF-lər, SELECT, WHERE və digər SQL əmrlərində istifadə edilə bilər.
+
 
 Transaction - SQL Server-də əməliyyatların birləşdirilməsi və idarə edilməsi üçün istifadə olunan bir xüsusiyyətdir.
             Transaction, bir və ya daha çox SQL əmrlərini bir araya gətirərək, bu əmrlərin hamısının uğurla yerinə yetirilməsini və ya heç birinin yerinə yetirilməməsini təmin edir.
@@ -804,12 +800,123 @@ RETURN
 
                                                             Transaction
 
-Transaction
+Transaction - SQL Server-də əməliyyatların birləşdirilməsi və idarə edilməsi üçün istifadə olunan bir xüsusiyyətdir.
+            Transaction, bir və ya daha çox SQL əmrlərini bir araya gətirərək, bu əmrlərin hamısının uğurla yerinə yetirilməsini və ya heç birinin yerinə yetirilməməsini təmin edir.
+            Transaction, SQL Server-də BEGIN TRANSACTION, COMMIT və ROLLBACK əmrləri ilə idarə olunur.
+
+Biz Update Delete və ya İnsert əməliyyatlarını yerinə yetirən zaman müvəqqəti bir cədvəl yaranır. 
+Məsələn 
+INSERT INTO (name, surname)
+VALUES ('Nadir','Zamanov')
+Bu əməliyyat zamanı müvəqqəti bir inserted table yaranır və uyğun datalar ilk olaraq bura yazılır və yoxlanılır ki, daha sonra problem olmasın.
+
+Transaction-ın 4 əsas prinsipi var. Bunlar:
+ACID:
+Atomicity - Transactionın bütün əməliyyatları ya uğurla yerinə yetirilməlidir, ya da heç biri yerinə yetirilməməlidir.
+            Yəni, əgər Transactionın bir hissəsi uğursuz olarsa, bütün Transaction geri alınmalıdır.
+
+Consistency - Transactionın sonunda verilənlər bazası hər zaman düzgün və tutarlı bir vəziyyətdə olmalıdır.
+              Yəni, Transactionın sonunda verilənlər bazası əvvəlki vəziyyətinə qayıtmalıdır.
+
+Isolation - Transactionlar bir-birindən müstəqil olmalıdır. Yəni, bir Transactionın nəticələri digər Transactionlar tərəfindən görünməməlidir.
+            Transactionın nəticələri, əməliyyat uğurla yerinə yetirildikdən sonra da qalıcı olmalıdır. Və Transactionlar bir birindən asılı olmamalıdır.
+
+Durability - Transactionın nəticələri, əməliyyat uğurla yerinə yetirildikdən sonra da qalıcı olmalıdır.
+            Yəni, əməliyyatın nəticələri verilənlər bazasında saxlanılmalıdır və sistemin çökməsi və ya digər problemlərdən sonra da mövcud olmalıdır.
+
  
+Transactionlar iki əsas növə bölünür:
+1. Explicit Transaction - İstifadəçi tərəfindən açılan və bağlanan Transactionlardır.
+            Explicit Transaction, BEGIN TRANSACTION əmri ilə başlanır və COMMIT və ya ROLLBACK əmri ilə bitirilir.
+            Məsələn:
+BEGIN TRANSACTION
+UPDATE Employees
+SET Salary = Salary * 1.1
+WHERE Department = 'Sales';
+COMMIT TRANSACTION
+
+2. Implicit Transaction - SQL Server tərəfindən avtomatik olaraq açılan və bağlanan Transactionlardır.
+            Implicit Transaction, hər bir SQL əmri üçün avtomatik olaraq açılır və əmrin sonunda bağlanır.
+            Məsələn, aşağıdakı kimi bir Implicit Transaction istifadə edə bilərsiniz:
+
+UPDATE Employees
+SET Salary = Salary * 1.1
+WHERE Department = 'Sales';
+// Bu əmrdə SQL Server avtomatik olaraq Implicit Transaction açır və əmrin sonunda bağlayır.
+
+Commit- SQL Server-də Transactionın uğurla yerinə yetirildiyini və əməliyyatların qalıcı olduğunu bildirmək üçün istifadə olunan bir əmrdır.
+            COMMIT əmri, Transactionın bütün əməliyyatlarını təsdiqləyir və verilənlər bazasında saxlayır.
+            Məsələn, aşağıdakı kimi bir COMMIT əmri istifadə edə bilərsiniz:
+
+Rollback - SQL Server-də Transactionın uğursuz olduğunu və əməliyyatların geri alındığını bildirmək üçün istifadə olunan bir əmrdır.
+            ROLLBACK əmri, Transactionın bütün əməliyyatlarını geri alır və verilənlər bazasını əvvəlki vəziyyətinə qaytarır.
+            Məsələn, aşağıdakı kimi bir ROLLBACK əmri istifadə edə bilərsiniz:
+
+Ümumi syntax belədir:
+BEGIN TRANSACTION
+-- SQL əmrləri
+IF @@ERROR <> 0
+BEGIN
+    ROLLBACK TRANSACTION
+    PRINT 'Transaction failed'
+END
+ELSE
+BEGIN
+    COMMIT TRANSACTION
+    PRINT 'Transaction succeeded'
+
  
+                                                    Triggers
+
+Triggers - SQL Server-də müəyyən bir hadisə baş verdikdə avtomatik olaraq işləyən bir kod blokudur.
+           Trigger-lər, INSERT, UPDATE və DELETE əməliyyatları üçün istifadə olunur.
+           Trigger-lər, SQL Server-də CREATE TRIGGER əmri ilə yaradılır.
+           Trigger-lər, cədvəldəki məlumatların dəyişdirilməsi zamanı avtomatik olaraq işləyir və əlavə əməliyyatlar yerinə yetirir.
+           Məsələn, aşağıdakı kimi bir Trigger istifadə edə bilərsiniz:
+
+Triggerlar 2 növə bölünür:
+1. DML Triggers - Data Manipulation Language (DML) əməliyyatları üçün istifadə olunan Trigger-lərdir.
+            DML Trigger-lər, INSERT, UPDATE və DELETE əməliyyatları üçün işləyir.
+            Məsələn, aşağıdakı kimi bir DML Trigger istifadə edə bilərsiniz:
+
+2. DDL Triggers - Data Definition Language (DDL) əməliyyatları üçün istifadə olunan Trigger-lərdir.
+            DDL Trigger-lər, CREATE, ALTER və DROP əməliyyatları üçün işləyir.
+            Məsələn, aşağıdakı kimi bir DDL Trigger istifadə edə bilərsiniz:
  
+Trigger əsas olaraq iki hissədə işləyir:
+1. Hər hansı əməliyyatın sonunda (AFTER) işləyir.
+2. Hər hansı əməliyyatın uğursuz olması (INSTEAD OF) halında işləyir.
+
+CREATE TRIGGER TriggerName
+ON TableName
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    -- Trigger kodu
+    PRINT 'Trigger executed'
+END
+
+
+CREATE TRIGGER TriggerName
+ON TableName
+INSTEAD OF INSERT, UPDATE, DELETE
+AS
+BEGIN
+    -- Trigger kodu
+    PRINT 'Trigger executed instead of operation'
+END
+
  
- 
+EXISTS keyword - SQL Server-də bir cədvəldə və ya alt sorğuda müəyyən bir şərtə uyğun sətirlərin olub olmadığını yoxlamaq üçün istifadə olunan bir açar sözdür.
+            EXISTS, TRUE və ya FALSE dəyəri qaytarır.
+            Məsələn, aşağıdakı kimi bir EXISTS istifadə edə bilərsiniz:
+IF EXISTS (SELECT * FROM Employees WHERE Department = 'Sales')
+BEGIN
+    PRINT 'There are employees in the Sales department'
+END
+ELSE
+    PRINT 'There are no employees in the Sales department'
+// Bu kod bloku, Employees cədvəlində Sales departamentində işçilərin olub olmadığını yoxlayır və uyğun mesajı göstərir.
  
  
  
