@@ -785,6 +785,8 @@ END
 CREATE FUNCTION dbo.GetStudentsByGroup
 (
     @GroupName NVARCHAR(50)
+
+
 )
 RETURNS TABLE
 AS
@@ -917,14 +919,41 @@ END
 ELSE
     PRINT 'There are no employees in the Sales department'
 // Bu kod bloku, Employees cədvəlində Sales departamentində işçilərin olub olmadığını yoxlayır və uyğun mesajı göstərir.
+
+
+
+                                                                 Database-in saxlanma yeri
+
+Fiziki - Hər bir database hər birinin içərisində 8 page Hər bir page 8 KB-dan ibarətdir. Hər bir page bir obyektə aid ola bilər. 
+         Yaranan bu page-lər bir extend daxilində yerləşir. Hər bir extend 8 page-dən ibarətdir. Əgər extend daxilində bütün page-lər
+         Sadəcə bir obyektə aiddirsə bu extend bircins extend adlanır. Amma extend daxilində page-lər bir neçə obyektə aiddirsə bu extend qarışıq extend adlanır.
+         Əgər extend daxilində sadəcə bir page varsa bu page mix page adlanır. Fiziki olaraq database-lər .mdf və .ldf fayllarında saxlanılır.
+         Bunlardan əlavə olaraq IAM (Index Allocation Map) page var və burada indexlər yerləşir və biz obyektə müraciət edən zaman ilk olaraq bu hissəyə müraciət olunur və sürət artır.
+
+
+Məntiqi - Əgər obyektə heç bir index təyin olunmazsa bu zaman bu datalar Heap adlanan sahədə saxlanır.
+        
+
+İndexlər iki növə bölünür:
+1. Clustered Index - Cədvəldəki sətirlərin fiziki sırasını təyin edən index növüdür.
+            Clustered Index, cədvəldəki sətirləri müəyyən bir sütuna görə sıralayır və bu sütun cədvəldəki PRIMARY KEY və ya UNIQUE sütunu ola bilər.
+            Hər cədvəldə yalnız bir Clustered Index ola bilər.
+
+2. Non-Clustered Index - Cədvəldəki sətirlərin fiziki sırasını təyin etməyən, lakin cədvəldəki məlumatlara daha sürətli erişim təmin edən index növüdür.
  
  
- 
- 
- 
- 
- 
- 
+Cədvəllərimizdə əgər iki tipdə olan indekslərdən hər hansı birini təyin etsək bu zaman B-Tree adlanan bir struktur yaranır.
+            B-Tree, verilənlər bazasında məlumatların sürətli axtarılması və sıralanması üçün istifadə olunan bir məlumat strukturdur.
+            B-Tree, verilənlər bazasında məlumatların hiyerarşik şəkildə təşkil edilməsini təmin edir və məlumatların daha sürətli axtarılmasını mümkün edir.
+            B-Tree, hər bir node-un müəyyən bir dərəcəyə malik olduğu və hər bir node-un müəyyən sayda uşaq node-a sahib olduğu bir ağac strukturudur.
+            B-Tree, verilənlər bazasında məlumatların daha sürətli axtarılmasını və sıralanmasını təmin edir.
+
+Əgər biz Clustered index təyin etsək bu zaman datalar əlavə olunduqca və ya silindikcə avtomatik olaraq yerdəyişmə edir.
+Amma Non-Clustered indexləmə zamanı bu datalar yerdəyişmə etmir sadəcə onlara olan reference-lər dəyişir.
+
+Clustered index syntax:
+CREATE CLUSTERED INDEX IndexName
+ON TableName (ColumnName);
  
  
  
