@@ -954,11 +954,26 @@ Amma Non-Clustered indexləmə zamanı bu datalar yerdəyişmə etmir sadəcə o
 Clustered index syntax:
 CREATE CLUSTERED INDEX IndexName
 ON TableName (ColumnName);
+
+
+Isolation Level — verilənlər bazasında transactionlar arasındakı təcrid səviyyəsini 
+(məsələn, bir transactionun digərinin məlumatlarını necə görməsi) müəyyən edən parametrdir.
+
+Yəni, bir transaction digərinin hələ tamamlanmamış (commit edilməmiş) məlumatlarını görə bilərmi? Və ya dəyişikliklərə necə reaksiya verir?
  
  
- 
- 
- 
+ Isolation Level	Təsviri
+
+READ UNCOMMITTED	Ən aşağı səviyyə. Digər transactionların commit edilməmiş (dirty) məlumatlarını oxumağa icazə verir. Dirty read olur.
+
+READ COMMITTED	Default səviyyə. Yalnız commit olunmuş məlumatları oxuyur. Dirty read olmur, amma non-repeatable read və phantom read ola bilər.
+
+REPEATABLE READ	Oxuduğu sətirlərin dəyişməsinə icazə vermir, yəni bir transaction ərzində oxunan sətirlər başqa transaction tərəfindən dəyişdirilə bilməz.
+Non-repeatable read qarşısını alır. Lakin yeni sətirlər əlavə edilə bilər → phantom read mövcuddur.
+
+SERIALIZABLE	Ən yüksək səviyyə. Transactionlar tam təcrid olunur. Həm non-repeatable, həm də phantom read qarşısını alır. Lakin performans zəifləyir.
+
+SNAPSHOT	Version-based oxuma modelidir. Məlumat transactionun başladığı andakı vəziyyət kimi görünür. Dirty, non-repeatable və phantom read olmaz.**
  
  
  
